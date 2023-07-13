@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 
 import 'view_model/card_validation_viewmodel.dart';
 
-
 final getX = GetStorage();
 Constants cardDetails = Constants();
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CardValidationViewModel(),),
+        ChangeNotifierProvider(
+          create: (context) => CardValidationViewModel(),
+        ),
       ],
       child: MaterialApp(
         title: 'Card Validator',

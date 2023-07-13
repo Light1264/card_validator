@@ -6,15 +6,31 @@ import 'package:provider/provider.dart';
 
 import '../view_model/card_validation_viewmodel.dart';
 
-class CardDisplay extends StatelessWidget {
+class CardDisplay extends StatefulWidget {
   CardDisplay({super.key});
+
+  @override
+  State<CardDisplay> createState() => _CardDisplayState();
+}
+
+class _CardDisplayState extends State<CardDisplay> {
+  dynamic validatedCards;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // getX.write(cardDetails.getXValidatedCards, []);
+    validatedCards = getX.read(cardDetails.getXValidatedCards);
+    print("++++++++++ $validatedCards");
+  }
 
   @override
   Widget build(BuildContext context) {
     CardValidationViewModel validatedcardsList =
         context.watch<CardValidationViewModel>();
-    validatedcardsList.validatedCards =
-        getX.read(cardDetails.getXValidatedCards);
+
+    // print(validatedcardsList.validatedCards);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,8 +52,8 @@ class CardDisplay extends StatelessWidget {
           ],
         ),
       ),
-      body: validatedcardsList.validatedCards == null ||
-              validatedcardsList.validatedCards!.isEmpty
+      body: validatedCards == null ||
+              validatedCards.toString().isEmpty
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,7 +73,7 @@ class CardDisplay extends StatelessWidget {
               ],
             )
           : ListView.builder(
-              itemCount: validatedcardsList.validatedCards!.length,
+              itemCount: validatedCards!.length,
               itemBuilder: (context, i) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
@@ -76,10 +92,10 @@ class CardDisplay extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "••••${validatedcardsList.validatedCards![i]["cardNumber"].toString().substring(14)}",
+                                "••••${validatedCards![i]["cardNumber"].toString().substring(14)}",
                               ),
                               Text(
-                                validatedcardsList.validatedCards![i]
+                                validatedCards![i]
                                     ["issuingCountry"],
                               ),
                               // const Spacer(),
@@ -87,7 +103,7 @@ class CardDisplay extends StatelessWidget {
                                 width: 50,
                                 height: 30,
                                 child: Image.asset(
-                                  validatedcardsList.validatedCards![i]
+                                  validatedCards![i]
                                           ["cardType"]
                                       .toString()
                                       .replaceFirst('[', '')

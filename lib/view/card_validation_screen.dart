@@ -1,7 +1,11 @@
 import 'package:card_validator/components/card_details.dart';
+import 'package:card_validator/utils/dialog.dart';
 import 'package:card_validator/view_model/card_validation_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../main.dart';
+import 'banned_countries..dart';
 
 class CardValidator extends StatelessWidget {
   const CardValidator({super.key});
@@ -68,20 +72,29 @@ class CardValidator extends StatelessWidget {
                 textTitle: "Issuing Country",
                 textController: cardValidationViewModel.issuingCountry,
               ),
+              const SizedBox(
+                height: 6,
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => BannedCountries(),
+                      ),
+                    );
+                  },
                   child: const Text(
                     "Banned Countries",
                     style: TextStyle(
-                      color: Color(0xFF323232),
+                      color: Color.fromARGB(255, 51, 77, 244),
                     ),
                   ),
                 ),
               ),
               const SizedBox(
-                height: 12,
+                height: 6,
               ),
               CardDetails(
                 textTitle: "CVV",
@@ -103,12 +116,24 @@ class CardValidator extends StatelessWidget {
                     elevation: MaterialStateProperty.all<double>(0),
                   ),
                   onPressed: () {
-                    if (cardValidationViewModel.cardNumber.text.isNotEmpty) {
+                    var cards = getX.read(cardDetails.getXValidatedCards);
+                    if (cardValidationViewModel.cardNumber.text
+                        .trim()
+                        .isNotEmpty) {
                       // if (cardValidationViewModel.holderName.text.isNotEmpty) {
-                      if (cardValidationViewModel.cvv.text.isNotEmpty) {
-                        if (cardValidationViewModel
-                            .issuingCountry.text.isNotEmpty) {
-                          cardValidationViewModel.runDelayedCode(context);
+                      if (cardValidationViewModel.cvv.text.trim().isNotEmpty) {
+                        if (cardValidationViewModel.issuingCountry.text
+                            .trim()
+                            .isNotEmpty) {
+                          if (cards.toString().isNotEmpty &&
+                              cards.toString().contains(cardValidationViewModel
+                                  .cardNumber.text
+                                  .trim())) {
+                            showMyDialog(
+                                context, "This card has already been verified");
+                          } else {
+                            cardValidationViewModel.runDelayedCode(context);
+                          }
                         }
                       }
                       // }

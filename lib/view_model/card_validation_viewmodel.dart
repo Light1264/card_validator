@@ -9,11 +9,11 @@ import '../components/credit_card_class.dart';
 
 class CardValidationViewModel extends ChangeNotifier {
   TextEditingController cardNumber = TextEditingController();
+  TextEditingController bannedCountry = TextEditingController();
   TextEditingController cvv = TextEditingController();
   TextEditingController holderName = TextEditingController();
   TextEditingController issuingCountry = TextEditingController();
-  List<Map<String, dynamic>>? validatedCards =
-      getX.read(cardDetails.getXValidatedCards);
+  List<dynamic>? validatedCards;
   // CardValidationViewModel.write("validatedVards", validatedCards);
   List<String> cardType = [
     "assets/visa_card.png",
@@ -127,26 +127,39 @@ class CardValidationViewModel extends ChangeNotifier {
       if (isValid) {
         if (bannedCountries.contains(issuingCountry.text.toLowerCase())) {
           showMyDialog(context, "Banned Issuing Country");
-          cardNumber.clear();
-          holderName.clear();
-          cvv.clear();
-          issuingCountry.clear();
+          // cardNumber.clear();
+          // holderName.clear();
+          // cvv.clear();
+          // issuingCountry.clear();
         } else {
           print("Card is Valid");
-          // List<Map<String, dynamic>> validatedCard = [];
-          validatedCards!.add({
-            "cardNumber": cardNumber.text,
-            "cardType": cardType,
-            "cvv": cvv.text,
-            "issuingCountry": issuingCountry.text
-          });
-          notifyListeners();
+          if (validatedCards == null) {
+            validatedCards = [];
+            validatedCards!.add({
+              "cardNumber": cardNumber.text,
+              "cardType": cardType,
+              "cvv": cvv.text,
+              "issuingCountry": issuingCountry.text
+            });
+            notifyListeners();
+          } else {
+            validatedCards!.add({
+              "cardNumber": cardNumber.text.trim(),
+              "cardType": cardType,
+              "cvv": cvv.text.trim(),
+              "issuingCountry": issuingCountry.text.trim()
+            });
+            notifyListeners();
+          }
+
+          print("---------------- $validatedCards");
           getX.write(cardDetails.getXValidatedCards, validatedCards);
+          print("++++++++++++++ ${getX.read(cardDetails.getXValidatedCards)}");
           showMyDialog(context, "Validation Complete");
-          cardNumber.clear();
-          holderName.clear();
-          cvv.clear();
-          issuingCountry.clear();
+          // cardNumber.clear();
+          // holderName.clear();
+          // cvv.clear();
+          // issuingCountry.clear();
           cardType = [
             "assets/visa_card.png",
             "assets/master_card.jpg",
@@ -177,5 +190,15 @@ class CardValidationViewModel extends ChangeNotifier {
               color: Color.fromARGB(255, 240, 239, 239),
             ),
           );
+  }
+
+  void addBannedCountry(String country) {
+    bannedCountries.add(country);
+    notifyListeners();
+  }
+
+  void removeBannedCountry(String country) {
+    bannedCountries.remove(country);
+    notifyListeners();
   }
 }
