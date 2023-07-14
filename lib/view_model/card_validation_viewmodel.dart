@@ -127,10 +127,10 @@ class CardValidationViewModel extends ChangeNotifier {
       if (isValid) {
         if (bannedCountries.contains(issuingCountry.text.toLowerCase())) {
           showMyDialog(context, "Banned Issuing Country");
-          // cardNumber.clear();
-          // holderName.clear();
-          // cvv.clear();
-          // issuingCountry.clear();
+          cardNumber.clear();
+          holderName.clear();
+          cvv.clear();
+          issuingCountry.clear();
         } else {
           print("Card is Valid");
           if (validatedCards == null) {
@@ -156,10 +156,10 @@ class CardValidationViewModel extends ChangeNotifier {
           getX.write(cardDetails.getXValidatedCards, validatedCards);
           print("++++++++++++++ ${getX.read(cardDetails.getXValidatedCards)}");
           showMyDialog(context, "Validation Complete");
-          // cardNumber.clear();
-          // holderName.clear();
-          // cvv.clear();
-          // issuingCountry.clear();
+          cardNumber.clear();
+          holderName.clear();
+          cvv.clear();
+          issuingCountry.clear();
           cardType = [
             "assets/visa_card.png",
             "assets/master_card.jpg",

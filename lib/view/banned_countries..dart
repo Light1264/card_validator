@@ -3,9 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../view_model/card_validation_viewmodel.dart';
 
-
-class BannedCountries extends StatelessWidget{
-const BannedCountries({super.key});
+class BannedCountries extends StatelessWidget {
+  const BannedCountries({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +84,7 @@ const BannedCountries({super.key});
                   onPressed: () {
                     bannedCountries.addBannedCountry(
                         bannedCountries.bannedCountry.text.trim());
+                    bannedCountries.bannedCountry.clear();
                   },
                   child: const Text(
                     'Add',

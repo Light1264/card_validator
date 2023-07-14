@@ -21,7 +21,7 @@ class _CardDisplayState extends State<CardDisplay> {
     // TODO: implement initState
     super.initState();
     // getX.write(cardDetails.getXValidatedCards, []);
-    validatedCards = getX.read(cardDetails.getXValidatedCards);
+    
     print("++++++++++ $validatedCards");
   }
 
@@ -29,6 +29,7 @@ class _CardDisplayState extends State<CardDisplay> {
   Widget build(BuildContext context) {
     CardValidationViewModel validatedcardsList =
         context.watch<CardValidationViewModel>();
+        validatedCards = getX.read(cardDetails.getXValidatedCards);
 
     // print(validatedcardsList.validatedCards);
 
@@ -125,7 +126,7 @@ class _CardDisplayState extends State<CardDisplay> {
             MaterialPageRoute(
               builder: ((context) => const CardValidator()),
             ),
-          );
+          ).then((value) => setState((){}));
         },
         backgroundColor: const Color(0xFF323232),
         child: const Center(
